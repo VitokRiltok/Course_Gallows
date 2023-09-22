@@ -8,6 +8,9 @@ from string import ascii_letters
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 pygame.font.init()
+pygame.mixer.music.load("pr/vb.mp3")
+pygame.mixer.music.play()
+screen = pygame.display.set_mode((400, 500))
 pygame.display.set_caption("Hangman")
 
 
@@ -54,3 +57,57 @@ class Hangman():
             r_leg = pygame.draw.line(screen, self.body_color, [189, 198], [208, 148], 6),
         elif self.wrong_guess_count == 6:
             l_leg = pygame.draw.line(screen, self.body_color, [224, 198], [210, 148], 6)
+            
+             def _right_guess(self, guess_letter):
+        index_positions = [index for index, item in enumerate(self.secret_word) if item == guess_letter]
+        for i in index_positions:
+            self.guessed_word = self.guessed_word[0:i] + guess_letter + self.guessed_word[i+1:]
+        # накладывает слой цвета на угаданное слово, чтобы скрыть несколько стеков догадавшихся слов
+        screen.fill(pygame.Color(self.background_color), (10, 370, 390, 20))
+
+
+    def _wrong_guess(self, guess_letter):
+        self.wrong_guesses.append(guess_letter)
+        self.wrong_guess_count += 1
+        self._man_pieces()
+
+
+    def _guess_taker(self, guess_letter):
+        if guess_letter in ascii_letters:
+            if guess_letter in self.secret_word and guess_letter not in self.guessed_word:
+                self._right_guess(guess_letter)
+            elif guess_letter not in self.secret_word and guess_letter not in self.wrong_guesses:
+                self._wrong_guess(guess_letter)
+
+
+    def _message(self):
+        # выиграть
+        if self.guessed_word == self.secret_word:
+            self.taking_guess = False
+            
+            message = self.font.render("winner winner chicken dinner!!", True, (255,235,0))
+            screen.blit(message,(20,220))
+
+        # проиграть игру
+        elif self.wrong_guess_count == 6:
+            self.taking_guess = False
+          
+            message = self.font.render("You lose !!", True, (150,0,10))
+            screen.blit(message,(150,220))
+            # показывает секретное слово, если игрок проиграет
+            word = self.font.render(f"secret word: {self.secret_word}", True, (255,255,255))
+            screen.blit(word,(10,300))
+
+        # удаляет сообщение с инструкциями, если больше не делать догадок
+        if not self.taking_guess:
+            screen.fill(pygame.Color(self.background_color), (35, 460, 390, 20))
+
+
+    def main(self):
+        # основные компоненты игры (обновлять не нужно)
+        screen.fill(self.background_color)
+        self._gallow()
+        instructions = self.font.render('Нажмите любую клавишу', True, (9,255,78))
+        screen.blit(instructions,(35,460))
+
+        while self.running:

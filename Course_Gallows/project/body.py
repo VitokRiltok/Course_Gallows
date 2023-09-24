@@ -57,8 +57,9 @@ class Hangman():
             r_leg = pygame.draw.line(screen, self.body_color, [189, 198], [208, 148], 6),
         elif self.wrong_guess_count == 6:
             l_leg = pygame.draw.line(screen, self.body_color, [224, 198], [210, 148], 6)
-            
-             def _right_guess(self, guess_letter):
+
+
+    def _right_guess(self, guess_letter):
         index_positions = [index for index, item in enumerate(self.secret_word) if item == guess_letter]
         for i in index_positions:
             self.guessed_word = self.guessed_word[0:i] + guess_letter + self.guessed_word[i+1:]
@@ -111,3 +112,35 @@ class Hangman():
         screen.blit(instructions,(35,460))
 
         while self.running:
+           
+            
+            # показывает отгаданное слово в окне игры
+            guessed_word = self.font.render(f"угаданное слово: {self.guessed_word}", True, (0,0,138))
+            screen.blit(guessed_word,(10,370))
+            # показывает неправильные предположения в окне игры
+            wrong_guesses = self.font.render(f"непр. догадки: {' '.join(map(str, self.wrong_guesses))}", True, (125,0,0))
+            screen.blit(wrong_guesses,(10,420))
+
+            # проверка состояния игры
+            self._message()
+        
+            for self.event in pygame.event.get():
+                if self.event.type == pygame.QUIT:
+                    self.running = False
+
+                # управляет нажатыми клавишами
+                elif self.event.type == pygame.KEYDOWN:
+                    if self.taking_guess:
+                        self._guess_taker(self.event.unicode)
+
+            pygame.display.flip()
+            self.FPS.tick(60)
+
+        pygame.quit()
+
+
+if __name__ =="__main__":
+    h = Hangman()
+    h.main()
+
+

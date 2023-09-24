@@ -2,4 +2,9 @@ hello
 around
 bad
 bread
+cry
+angry
+pasta
+food
+very
 artist

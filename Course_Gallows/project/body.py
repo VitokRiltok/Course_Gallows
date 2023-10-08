@@ -96,7 +96,7 @@ class Hangman():
             message = self.font.render("You lose !!", True, (150,0,10))
             screen.blit(message,(150,220))
             # показывает секретное слово, если игрок проиграет
-            word = self.font.render(f"secret word: {self.secret_word}", True, (255,255,255))
+            word = self.font.render(f"Правильное слово: {self.secret_word}", True, (255,255,255))
             screen.blit(word,(10,300))
 
         # удаляет сообщение с инструкциями, если больше не делать догадок
